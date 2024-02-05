@@ -6,6 +6,7 @@ from io import BytesIO
 import requests
 from PIL import Image
 from argument_parser import get_args
+
 # Пусть наше приложение предполагает запуск:
 # python search.py Москва, ул. Ак. Королева, 12
 # Тогда запрос к геокодеру формируется следующим образом:
@@ -38,12 +39,14 @@ toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
 map_params = {
     "ll": ",".join([toponym_longitude, toponym_lattitude]),
     "spn": ",".join([delta, delta]),
-    "l": "map"
+    "l": "map",
+    "pt": ",".join([toponym_longitude, toponym_lattitude,"pm2dol"])
 }
 
 map_api_server = "http://static-maps.yandex.ru/1.x/"
 # ... и выполняем запрос
 response = requests.get(map_api_server, params=map_params)
+
 
 Image.open(BytesIO(
     response.content)).show()
